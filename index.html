@@ -408,7 +408,32 @@ function filiereName(v){return{cda:'Concepteur Développeur d\'Applications',sio
 function modaliteName(v){return{alternance:'Alternance',initial:'Formation initiale',nsp:'À définir'}[v]||v;}
 function slotName(v){return{matin:'Matin (avant 9h)',midi:'Midi (12h–14h)',soir:'Soir (après 18h)',weekend:'Week-end'}[v]||v;}
 
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbzeJq0vsy73XhJbOIaTvGxzMmRboFgociw_8U2NbgVintHKOfT2zzP1uDtN9nj4hBfbsA/exec';
+
+function sendToSheets(){
+  var payload={
+    q1:state.q1||'',
+    q2:state.q2||'',
+    q3:state.q3||[],
+    q4:state.q4||'',
+    q5:state.q5||'',
+    q6:state.q6||'',
+    q7:state.q7||[],
+    q8:state.q8||'',
+    nom:state.nom||'',
+    email:state.email||'',
+    tel:state.tel||''
+  };
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).catch(function(e){console.log('Sheets error:',e);});
+}
+
 function finish(){
+  sendToSheets();
   document.getElementById('formCard').style.display='none';
   document.getElementById('progressBar') && (document.getElementById('progressBar').style.display='none');
   if(state.q6==='oui'){
